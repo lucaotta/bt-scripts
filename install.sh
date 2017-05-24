@@ -1,1 +1,1 @@
-scp -r etc/ home/ root@192.168.129.1:
+scp -r etc home root@192.168.129.1:/
