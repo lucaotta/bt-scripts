@@ -7,5 +7,17 @@ if [ "$#" -lt 1 ]; then
 fi
 
 ssh root@192.168.129.1 'mount -o remount,rw /; passwd -d root'
-scp -r etc home root@192.168.129.1:/
+scp -qr etc home root@192.168.129.1:/
 echo "alias kp='killall $1'" | ssh root@192.168.129.1 "cat >> /home/root/.profile"
+# Disable watchdog
+scp -q root@192.168.129.1:/var/tmp/stack_open.xml /tmp/
+# Remove watchdog
+python_ret=$(python -c "from xml.etree import ElementTree as et; tree = et.parse('/tmp/stack_open.xml'); tree.getroot().find('sw/wdt/enable').text = 0; tree.getroot().find('sw/${1}/logverbosity').text = '0x3F';tree.write('/tmp/stack_open.xml');")
+# Increase loglevel of target application
+python -c "from xml.etree import ElementTree as et; tree = et.parse('/tmp/stack_open.xml'); tree.getroot().find('sw/${1}/logverbosity').text = '0x3F';tree.write('/tmp/stack_open.xml');"
+if [[ $python_ret -eq 0 ]]; then
+    scp -q /tmp/stack_open.xml root@192.168.129.1:/var/tmp/stack_open.xml
+fi
+ssh root@192.168.129.1 '/sbin/reboot'
+# We have restarted the system, the device will change the ssh key. Remove any stored entry
+ssh-keygen -R 192.168.129.1
