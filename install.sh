@@ -12,9 +12,7 @@ echo "alias kp='killall $1'" | ssh root@192.168.129.1 "cat >> /home/root/.profil
 # Disable watchdog
 scp -q root@192.168.129.1:/var/tmp/stack_open.xml /tmp/
 # Remove watchdog
-python_ret=$(python -c "from xml.etree import ElementTree as et; tree = et.parse('/tmp/stack_open.xml'); tree.getroot().find('sw/wdt/enable').text = 0; tree.getroot().find('sw/${1}/logverbosity').text = '0x3F';tree.write('/tmp/stack_open.xml');")
-# Increase loglevel of target application
-python -c "from xml.etree import ElementTree as et; tree = et.parse('/tmp/stack_open.xml'); tree.getroot().find('sw/${1}/logverbosity').text = '0x3F';tree.write('/tmp/stack_open.xml');"
+python_ret=$(python -c "from xml.etree import ElementTree as et; tree = et.parse('/tmp/stack_open.xml'); tree.getroot().find('sw/wdt/enable').text = '0'; tree.getroot().find('sw/${1}/logverbosity').text = '0x3F';tree.write('/tmp/stack_open.xml');")
 if [[ $python_ret -eq 0 ]]; then
     scp -q /tmp/stack_open.xml root@192.168.129.1:/var/tmp/stack_open.xml
 fi
