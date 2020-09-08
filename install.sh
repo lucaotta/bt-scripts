@@ -8,7 +8,7 @@ fi
 
 ssh root@192.168.129.1 'mount -o remount,rw /; passwd -d root'
 scp -qr etc home root@192.168.129.1:/
-echo "alias kp='killall $1'" | ssh root@192.168.129.1 "cat >> /home/root/.profile"
+echo "alias kp='killall -9 $1'" | ssh root@192.168.129.1 "cat >> /home/root/.profile"
 # Disable watchdog
 scp -q root@192.168.129.1:/var/tmp/stack_open.xml /tmp/
 # Remove watchdog
