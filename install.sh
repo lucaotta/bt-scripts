@@ -2,7 +2,7 @@
 set -eou pipefail
 cd "$(dirname "$0")/"
 if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 [exe name]"
+    echo "Usage: $0 [GUI exe name]"
     exit 1
 fi
 
