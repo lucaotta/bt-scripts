@@ -8,4 +8,5 @@ alias alexa-mute='sendopen --opencommand *7*70#9##'
 alias alexa-unmute='sendopen --opencommand *7*70#8##'
 alias fw-prepare-update='echo 0 > /sys/block/mmcblk0boot0/force_ro; dd if=/dev/zero of=/dev/mmcblk0boot0 bs=1M count=1; echo 1 > /sys/block/mmcblk0boot0/force_ro;'
 alias fw-version='cat /home/bticino/sp/dbfiles_ws.xml | grep ver_webserver | colrm 1 21 | cut --delimiter="<" --fields=1'
+alias monitor-cma='clear; while (true); do grep CmaFree /proc/meminfo; sleep 1; done'
 cd /home/bticino
